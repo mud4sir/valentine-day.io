@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine Drama</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff0f3;
+            font-family: 'Arial Rounded MT Bold', sans-serif;
+            overflow: hidden;
+            text-align: center;
+            transition: background-color 0.5s;
+        }
+
+        .container {
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+
+        #gifDisplay {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            min-height: 80px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+        }
+
+        #noBtn {
+            background-color: #8a8a8a;
+            color: white;
+        }
+
+        /* Dramatic Shake Animation */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+
+        .shake-effect {
+            animation: shake 0.2s ease-in-out 0s 2;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mainUI" class="container">
+        <img id="gifDisplay" src="https://media.tenor.com/7SgI9L5A8YQAAAAi/mochi-peach.gif" alt="Asking">
+        
+        <h1 id="questionText">Kya aap meri Valentine banengi? ❤️</h1>
+        
+        <div class="buttons">
+            <button id="yesBtn">Yes My Love</button>
+            <button id="noBtn">No</button>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const gifDisplay = document.getElementById('gifDisplay');
+        const questionText = document.getElementById('questionText');
+        const body = document.body;
+
+        let noCount = 0;
+        const noMessages = [
+            "Why No?? 🥺",
+            "Wapis socho... Please? 😭",
+            "Itna gussa? Ek baar aur socho! 💔",
+            "Janeman please maan jao! 🌹",
+            "Ab toh Yes karna hi parega! 😤"
+        ];
+
+        let yesScale = 1;
+        let noScale = 1;
+
+        noBtn.addEventListener('click', () => {
+            noCount++;
+            
+            // 1. Shake the screen
+            body.classList.add('shake-effect');
+            setTimeout(() => body.classList.remove('shake-effect'), 400);
+
+            // 2. Change the GIF to something sad
+            gifDisplay.src = "https://media.tenor.com/Xm6nN9Tdf_0AAAAi/peach-goma.gif";
+
+            // 3. Update Text with Roman Urdu Drama
+            if (noCount <= noMessages.length) {
+                questionText.innerText = noMessages[noCount - 1];
+            } else {
+                questionText.innerText = "Ab toh options khatam! 😂";
+            }
+
+            // 4. Dramatic Button Size Changes
+            yesScale += 0.4; // Make Yes button huge
+            noScale -= 0.1;  // Make No button tiny
+            
+            yesBtn.style.transform = `scale(${yesScale})`;
+            noBtn.style.transform = `scale(${noScale})`;
+            
+            // 5. Change background color to get more "red" with anger/sadness
+            const redIntensity = Math.min(255, 240 - (noCount * 20));
+            body.style.backgroundColor = `rgb(255, ${redIntensity}, ${redIntensity + 10})`;
+        });
+
+        yesBtn.addEventListener('click', () => {
+            // The Happy Ending
+            gifDisplay.src = "https://media.tenor.com/gU_Pb_76Y6YAAAAi/goma-happy.gif";
+            questionText.innerHTML = "I love you meri jan! 💖✨🌹";
+            
+            // Clean up UI
+            document.querySelector('.buttons').style.display = 'none';
+            body.style.backgroundColor = "#fff0f3";
+
+            // Graffiti Burst
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff4d6d', '#ff758f', '#ffffff']
+            });
+        });
+    </script>
+</body>
+</html>
